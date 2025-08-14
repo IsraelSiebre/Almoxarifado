@@ -1,8 +1,10 @@
 package com.almoxarifado.controller;
 
+import com.almoxarifado.entity.Item;
 import com.almoxarifado.entity.TipoItem;
 import com.almoxarifado.entity.Usuario;
 import com.almoxarifado.security.UsuarioPrincipal;
+import com.almoxarifado.service.EstoqueService;
 import com.almoxarifado.service.TipoItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,40 +18,49 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/tipo-item")
-public class TipoItemController {
+@RequestMapping("/estoque")
+public class EstoqueController {
+
+    @Autowired
+    private EstoqueService estoqueService;
 
     @Autowired
     private TipoItemService tipoItemService;
 
     @GetMapping("/")
-    public String mostrarTiposItem(Authentication auth, Model model) {
+    public String mostarEstoque(Authentication auth, Model model) {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-        model.addAttribute("listaTipoItens", tipoItemService.listarTiposItem());
+        model.addAttribute("listaItens", estoqueService.listarItens());
 
-        return "tipo-item/lista";
+        return "item/lista";
     }
 
     @GetMapping("/cadastro")
-    public String mostrarFormularioTipoItem(Authentication auth, Model model) {
+    public String mostrarFormularioItem(Authentication auth, Model model) {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
+        List<TipoItem> tiposDeItem = tipoItemService.listarTiposItem();
+
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-        model.addAttribute("tipoItem", new TipoItem());
+        model.addAttribute("item", new Item());
+        model.addAttribute("tipos", tiposDeItem);
+
+        model.addAttribute("textoTitulo", "Cadastro de Item");
         model.addAttribute("cadastro", true);
 
-        return "tipo-item/cadastro";
+        return "item/cadastro";
     }
 
     @PostMapping("/cadastro/salvar")
-    public String salvarTipoItem(@Valid TipoItem tipoItem,
+    public String salvarItem(@Valid Item item,
                                  BindingResult result,
                                  RedirectAttributes redirect,
                                  Model model,
@@ -59,20 +70,23 @@ public class TipoItemController {
 
         if (result.hasErrors()) {
             model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", tipoItem.getId() == null);  // true se for cadastro
-            return "tipo-item/cadastro";
+            model.addAttribute("cadastro", item.getId() == null);  // true se for cadastro
+            return "item/cadastro";
         }
 
-        boolean sucesso = tipoItemService.cadastrarTipoItem(tipoItem);
+        boolean sucesso = estoqueService.cadastrarItem(item);
         if (sucesso) {
-            return "redirect:/tipo-item/";
+            redirect.addFlashAttribute("mensagem", "Item salvo com sucesso!");
+            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+            model.addAttribute("cadastro", item.getId() == null);
+            return "redirect:estoque/cadastro";
 
         } else {
             // Nome duplicado
             model.addAttribute("mensagem", "Tipo de Item já existe.");
             model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", tipoItem.getId() == null);
-            return "tipo-item/cadastro";
+            model.addAttribute("cadastro", item.getId() == null);
+            return "redirect:estoque/cadastro";
         }
     }
 
@@ -82,24 +96,25 @@ public class TipoItemController {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
-        Optional<TipoItem> tipoItem = tipoItemService.buscarPorId(id);
+        Optional<Item> item = estoqueService.buscarPorId(id);
 
-        if (tipoItem.isPresent()) {
+        if (item.isPresent()) {
             model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("tipoItem", tipoItem.get());
+            model.addAttribute("item", item.get());
             model.addAttribute("cadastro", false);
-            return "tipo-item/cadastro";
+            return "item/cadastro";
         } else {
-            redirect.addFlashAttribute("mensagem", "Tipo de Item não encontrado.");
-            return "redirect:/tipo-item/";
+            redirect.addFlashAttribute("mensagem", "Item não encontrado.");
+            return "redirect:/estoque/";
         }
     }
 
 
     @PostMapping("/deletar/{id}")
-    public String deletarTipoItem(@PathVariable Long id, RedirectAttributes redirect) {
-        tipoItemService.deletarTipoItem(id);
-        redirect.addFlashAttribute("mensagem", "Tipo de Item deletado com sucesso!");
-        return "redirect:/tipo-item/";
+    public String deletarItem(@PathVariable Long id, RedirectAttributes redirect) {
+        estoqueService.deletarItem(id);
+        redirect.addFlashAttribute("mensagem", "Item deletado com sucesso!");
+        return "redirect:/estoque/";
     }
+
 }
