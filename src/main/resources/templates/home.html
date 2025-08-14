@@ -51,16 +51,34 @@
       <p class="text-gray-600 text-sm">Adicione um novo item ao estoque do almoxarifado.</p>
     </a>
 
-    <!-- Cadastrar tipo de item -->
+    <!-- Ver tipo de item -->
     <a th:href="@{/tipo-item/}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Tipos de item</h2>
+      <h2 class="text-lg font-semibold text-blue-700 mb-2">Listagem dos Tipos de item</h2>
+      <p class="text-gray-600 text-sm">Consulte as categorias ou tipos para os itens armazenados.</p>
+    </a>
+
+    <!-- Cadastrar tipo de item -->
+    <a th:href="@{/tipo-item/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-700 mb-2">Cadastrar Tipo de Item</h2>
       <p class="text-gray-600 text-sm">Crie categorias ou tipos para os itens armazenados.</p>
     </a>
 
-    <!-- Fazer movimentação (entrada/saída) -->
-    <a href="/movimentacoes/nova" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+    <!-- Nova entrada -->
+    <a href="/entrada/nova" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-700 mb-2">Entrada de itens</h2>
+      <p class="text-gray-600 text-sm">Registre entrada de materiais do almoxarifado.</p>
+    </a>
+
+    <!-- Nova saida -->
+    <a href="/saida/nova" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-700 mb-2">Saida de itens</h2>
+      <p class="text-gray-600 text-sm">Registre saída de materiais do almoxarifado.</p>
+    </a>
+
+    <!-- Ver movimentações (entrada/saída) -->
+    <a href="/movimentacoes/" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
       <h2 class="text-lg font-semibold text-blue-700 mb-2">Movimentação de itens</h2>
-      <p class="text-gray-600 text-sm">Registre entrada ou saída de materiais do almoxarifado.</p>
+      <p class="text-gray-600 text-sm">Consulte entradas ou saídas de materiais do almoxarifado.</p>
     </a>
 
     <!-- Ver itens do estoque -->

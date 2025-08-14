@@ -25,7 +25,7 @@ public class TipoItemController {
     @Autowired
     private TipoItemService tipoItemService;
 
-    @GetMapping({"", "/"})
+    @GetMapping("/")
     public String mostrarTiposItem(Authentication auth, Model model) {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
