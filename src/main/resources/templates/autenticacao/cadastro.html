@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro | Ferramentas em Uso Mecânica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen pt-20">
+
+<!-- Navbar -->
+<header class="bg-white shadow fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <a th:href="@{/home}" class="text-xl font-bold text-blue-600 hover:underline">
+            Ferramentas em Uso Mecânica
+        </a>
+
+        <nav class="flex items-center space-x-6">
+            <span class="text-gray-700">
+                Olá, <span class="font-semibold" th:text="${nomeUsuario}"></span>
+            </span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit"
+                        class="text-sm text-red-600 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-600 rounded px-2 py-1 transition">
+                    Sair
+                </button>
+            </form>
+        </nav>
+    </div>
+</header>
+
+<div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-md">
+    <div class="text-center">
+        <h1 th:text="${textoTitulo}" class="text-2xl font-bold text-gray-800"></h1>
+        <p th:text="${textoSubTitulo}" class="text-sm text-gray-500"></p>
+    </div>
+
+    <!-- Alerta -->
+    <div th:if="${mensagem}"
+         class="p-4 mb-6 bg-green-100 border border-green-400 text-green-700 rounded w-full max-w-2xl text-center shadow mx-auto">
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <form method="post"
+          th:action="@{/cadastro/salvar}"
+          th:object="${usuario}"
+          class="space-y-4">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700">Nome completo</label>
+            <input th:field="*{nome}"
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    required
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Seu nome completo"
+            />
+        </div>
+
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+            <input  th:field="*{email}"
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="email@exemplo.com"
+            />
+        </div>
+
+        <div>
+            <label for="senha" class="block text-sm font-medium text-gray-700">Senha</label>
+            <input th:field="*{senha}"
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    required
+                    minlength="6"
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Sua senha"
+            />
+        </div>
+
+        <div th:if="${cadastro}" >
+            <label for="role" class="block text-sm font-medium text-gray-700">Perfil</label>
+            <select
+                    id="role"
+                    name="role"
+                    required
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+                <option value="" disabled selected>Selecione um perfil</option>
+                <option value="ADMIN">Administrador</option>
+                <option value="ALUNO">Aluno</option>
+                <option value="INSTRUTOR">Instrutor</option>
+            </select>
+        </div>
+
+        <div>
+            <button
+                    type="submit"
+                    class="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition duration-200">
+                Salvar
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
