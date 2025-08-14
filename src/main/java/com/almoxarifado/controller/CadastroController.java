@@ -26,8 +26,6 @@ public class CadastroController {
         Usuario usuario = principal.getUsuario();
 
         model.addAttribute("usuario", new Usuario());
-        model.addAttribute("textoTitulo", "Cadastro de Usuário");
-        model.addAttribute("textoSubTitulo", "Crie sua conta preenchendo os campos abaixo");
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
         model.addAttribute("cadastro", true);
 
@@ -43,14 +41,11 @@ public class CadastroController {
                                    Authentication auth) {
         if (result.hasErrors()) {
             if (usuario.getId() == null) {
-                model.addAttribute("textoTitulo", "Cadastro de Usuário");
-                model.addAttribute("textoSubTitulo", "Crie sua conta preenchendo os campos abaixo");
-                model.addAttribute("textoBotao", "Cadastrar");
                 model.addAttribute("cadastro", true);
+
             } else {
-                model.addAttribute("textoTitulo", "Edição de Usuário");
-                model.addAttribute("textoSubTitulo", "Edite as informações da sua conta preenchendo os campos abaixo");
                 model.addAttribute("cadastro", false);
+
             }
             return "autenticacao/cadastro";
         }
@@ -61,7 +56,9 @@ public class CadastroController {
         if (usuario.getId() == null) {
             sucesso = usuarioService.cadastrarUsuario(usuario);
             mensagem = sucesso ? "Usuário criado com sucesso!" : "Usuário já existe.";
+
             if (sucesso) {
+                redirect.addFlashAttribute("sucesso", sucesso);
                 redirect.addFlashAttribute("mensagem", mensagem);
                 return "redirect:/cadastro"; // volta para tela de cadastro limpa
             }
@@ -72,6 +69,7 @@ public class CadastroController {
             UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
             sucesso = usuarioService.atualizarUsuario(principal.getUsuario().getId(), usuario);
             mensagem = sucesso ? "Usuário atualizado com sucesso!" : "Usuário já existe.";
+            redirect.addFlashAttribute("sucesso", sucesso);
             redirect.addFlashAttribute("mensagem", mensagem);
 
             return "redirect:/editar-perfil"; // volta para edição
@@ -84,9 +82,6 @@ public class CadastroController {
         Usuario usuario = principal.getUsuario();
 
         model.addAttribute("usuario", usuario);
-        model.addAttribute("textoTitulo", "Edição de Usuário");
-        model.addAttribute("textoSubTitulo", "Edite as informações sua conta preenchendo os campos abaixo");
-        model.addAttribute("textoBotao", "Salvar");
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
         model.addAttribute("cadastro", false);
 

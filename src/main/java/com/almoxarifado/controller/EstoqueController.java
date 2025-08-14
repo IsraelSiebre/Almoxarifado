@@ -61,34 +61,36 @@ public class EstoqueController {
 
     @PostMapping("/cadastro/salvar")
     public String salvarItem(@Valid Item item,
-                                 BindingResult result,
-                                 RedirectAttributes redirect,
-                                 Model model,
-                                 Authentication auth) {
+                             BindingResult result,
+                             RedirectAttributes redirect,
+                             Model model,
+                             Authentication auth) {
+
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
+        List<TipoItem> tiposDeItem = tipoItemService.listarTiposItem();
+
+        boolean cadastro = item.getId() == null;
+
+        model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+        model.addAttribute("tipos", tiposDeItem);
+        model.addAttribute("cadastro", cadastro);
+
         if (result.hasErrors()) {
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", item.getId() == null);  // true se for cadastro
+            model.addAttribute("item", item); // mantém valores para corrigir
             return "item/cadastro";
         }
 
         boolean sucesso = estoqueService.cadastrarItem(item);
-        if (sucesso) {
-            redirect.addFlashAttribute("mensagem", "Item salvo com sucesso!");
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", item.getId() == null);
-            return "redirect:estoque/cadastro";
 
-        } else {
-            // Nome duplicado
-            model.addAttribute("mensagem", "Tipo de Item já existe.");
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", item.getId() == null);
-            return "redirect:estoque/cadastro";
-        }
+        model.addAttribute("sucesso", sucesso);
+        model.addAttribute("mensagem", sucesso ? "Item Salvo com Sucesso!" : "Item já existe!");
+        model.addAttribute("item", sucesso && cadastro ? new Item() : item);
+
+        return "item/cadastro";
     }
+
 
 
     @GetMapping("/editar/{id}")
@@ -96,17 +98,16 @@ public class EstoqueController {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
+        List<TipoItem> tiposDeItem = tipoItemService.listarTiposItem();
         Optional<Item> item = estoqueService.buscarPorId(id);
 
-        if (item.isPresent()) {
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("item", item.get());
-            model.addAttribute("cadastro", false);
-            return "item/cadastro";
-        } else {
-            redirect.addFlashAttribute("mensagem", "Item não encontrado.");
-            return "redirect:/estoque/";
-        }
+        model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+        model.addAttribute("item", item.get());
+        model.addAttribute("tipos", tiposDeItem);
+        model.addAttribute("cadastro", false);
+
+        return "item/cadastro";
+
     }
 
 
@@ -114,6 +115,7 @@ public class EstoqueController {
     public String deletarItem(@PathVariable Long id, RedirectAttributes redirect) {
         estoqueService.deletarItem(id);
         redirect.addFlashAttribute("mensagem", "Item deletado com sucesso!");
+
         return "redirect:/estoque/";
     }
 

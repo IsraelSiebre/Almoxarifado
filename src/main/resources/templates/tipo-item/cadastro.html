@@ -38,10 +38,9 @@
   </div>
 
   <!-- Alerta -->
-  <div th:if="${mensagem}"
-       class="p-4 mb-6 bg-red-100 border border-red-400 text-red-700 rounded w-full max-w-2xl text-center shadow mx-auto">
-    <span th:text="${mensagem}"></span>
-  </div>
+    <div th:if="${mensagem}" th:class="'p-4 mb-6 rounded w-full max-w-2xl text-center shadow mx-auto border ' + (${sucesso} ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700')">
+        <span th:text="${mensagem}"></span>
+    </div>
 
   <form th:action="@{/tipo-item/cadastro/salvar}" th:object="${tipoItem}" method="post" class="space-y-4">
     <input type="hidden" th:field="*{id}" />

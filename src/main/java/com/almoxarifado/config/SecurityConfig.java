@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
 
                         .requestMatchers("/cadastro").hasAnyRole(roleInstrutor, roleAdmin)
-                        .requestMatchers("/cadastro/salvar").hasAnyRole(roleInstrutor, roleAdmin)
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

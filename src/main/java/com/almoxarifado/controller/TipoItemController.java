@@ -51,30 +51,31 @@ public class TipoItemController {
     @PostMapping("/cadastro/salvar")
     public String salvarTipoItem(@Valid TipoItem tipoItem,
                                  BindingResult result,
-                                 RedirectAttributes redirect,
                                  Model model,
                                  Authentication auth) {
+
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
 
+        boolean cadastro = tipoItem.getId() == null;
+
+        model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+        model.addAttribute("cadastro", cadastro);
+
         if (result.hasErrors()) {
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", tipoItem.getId() == null);  // true se for cadastro
+            model.addAttribute("tipoItem", tipoItem); // mantém valores para corrigir
             return "tipo-item/cadastro";
         }
 
         boolean sucesso = tipoItemService.cadastrarTipoItem(tipoItem);
-        if (sucesso) {
-            return "redirect:/tipo-item/";
 
-        } else {
-            // Nome duplicado
-            model.addAttribute("mensagem", "Tipo de Item já existe.");
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("cadastro", tipoItem.getId() == null);
-            return "tipo-item/cadastro";
-        }
+        model.addAttribute("sucesso", sucesso);
+        model.addAttribute("mensagem", sucesso ? "Tipo de Item Salvo com Sucesso!" : "Tipo de Item já existe!");
+        model.addAttribute("tipoItem", sucesso && cadastro ? new TipoItem() : tipoItem);
+
+        return "tipo-item/cadastro";
     }
+
 
 
     @GetMapping("/editar/{id}")
@@ -84,15 +85,12 @@ public class TipoItemController {
 
         Optional<TipoItem> tipoItem = tipoItemService.buscarPorId(id);
 
-        if (tipoItem.isPresent()) {
-            model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-            model.addAttribute("tipoItem", tipoItem.get());
-            model.addAttribute("cadastro", false);
-            return "tipo-item/cadastro";
-        } else {
-            redirect.addFlashAttribute("mensagem", "Tipo de Item não encontrado.");
-            return "redirect:/tipo-item/";
-        }
+        model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+        model.addAttribute("tipoItem", tipoItem.get());
+        model.addAttribute("cadastro", false);
+
+        return "tipo-item/cadastro";
+
     }
 
 
@@ -100,6 +98,7 @@ public class TipoItemController {
     public String deletarTipoItem(@PathVariable Long id, RedirectAttributes redirect) {
         tipoItemService.deletarTipoItem(id);
         redirect.addFlashAttribute("mensagem", "Tipo de Item deletado com sucesso!");
+
         return "redirect:/tipo-item/";
     }
 }
