@@ -33,7 +33,7 @@
 
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Movimentações do Estoque</h2>
-        <a th:href="@{/movimentacoes/nova}"
+        <a th:href="@{/movimentacoes/nova/ENTRADA}"
            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
             + Registrar Movimentação
         </a>
@@ -63,13 +63,6 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${mov.usuario.nome}"></td>
                 <td class="px-6 py-4 text-sm text-gray-700" th:text="${mov.observacoes}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-4">
-                    <!-- Editar -->
-                    <a th:href="@{'/movimentacoes/editar/' + ${mov.id}}" title="Editar" class="text-blue-600 hover:text-blue-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z"/>
-                        </svg>
-                    </a>
                     <!-- Deletar -->
                     <form th:action="@{'/movimentacoes/deletar/' + ${mov.id}}" method="post"
                           th:onsubmit="return confirm('Tem certeza que deseja deletar esta movimentação?');"

@@ -74,11 +74,11 @@
                                   d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z"/>
                         </svg>
                     </a>
-                    <!-- Deletar -->
-                    <form th:action="@{'/estoque/deletar/' + ${item.id}}" method="post"
-                          th:onsubmit="return confirm('Tem certeza que deseja deletar este item?');"
+                    <!-- Inativar -->
+                    <form th:action="@{'/estoque/inativar/' + ${item.id}}" method="post"
+                          th:onsubmit="return confirm('Tem certeza que deseja inativar este item?');"
                           class="inline">
-                        <button type="submit" title="Deletar" class="text-red-600 hover:text-red-900 focus:outline-none">
+                        <button type="submit" title="Inativar" class="text-red-600 hover:text-red-900 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M6 18L18 6M6 6l12 12"/>

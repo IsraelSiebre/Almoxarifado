@@ -6,7 +6,7 @@
     <title>Registrar Movimentação | Ferramentas em Uso Mecânica</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen pt-20">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen pt-20">
 
 <!-- Navbar -->
 <header class="bg-white shadow fixed top-0 left-0 right-0 z-50">
@@ -29,16 +29,28 @@
     </div>
 </header>
 
-<main class="max-w-3xl mx-auto px-4 py-8 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Registrar Movimentação</h2>
+<!-- Formulário centralizado -->
+<div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-md">
 
-    <form th:action="@{/movimentacoes/cadastro/salvar}" method="post" class="space-y-6">
+    <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-800">Registrar Movimentação</h1>
+        <p class="text-sm text-gray-500">Preencha as informações abaixo</p>
+    </div>
+
+    <!-- Alerta -->
+    <div th:if="${mensagem}"
+         th:class="'p-4 mb-6 rounded w-full text-center shadow border ' + (${sucesso} ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700')">
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <form th:action="@{/movimentacoes/nova/salvar}" method="post" class="space-y-4">
 
         <!-- Item -->
         <div>
             <label for="item" class="block text-sm font-medium text-gray-700">Item</label>
             <select id="item" name="itemId" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="">Selecione um item</option>
                 <option th:each="item : ${listaItens}"
                         th:value="${item.id}"
@@ -51,10 +63,13 @@
         <div>
             <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo de Movimentação</label>
             <select id="tipo" name="tipo" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Selecione o tipo</option>
-                <option value="ENTRADA">Entrada</option>
-                <option value="SAIDA">Saida</option>
+                    class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option th:each="t : ${tipos}"
+                        th:value="${t}"
+                        th:text="${#strings.capitalize(t.name().toLowerCase())}"
+                        th:selected="${t} == ${tipoSelecionado}">
+                </option>
             </select>
         </div>
 
@@ -62,25 +77,27 @@
         <div>
             <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
             <input type="number" id="quantidade" name="quantidade" required min="1"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                   class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
         </div>
 
         <!-- Observações -->
         <div>
             <label for="observacoes" class="block text-sm font-medium text-gray-700">Observações</label>
             <textarea id="observacoes" name="observacoes" rows="3"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                      class="w-full px-4 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md
+                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
         </div>
 
-        <!-- Botões -->
-        <div class="flex justify-end space-x-4">
+        <!-- Botão -->
+        <div>
             <button type="submit"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                    class="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition duration-200">
                 Salvar
             </button>
         </div>
     </form>
-</main>
+</div>
 
 </body>
 </html>

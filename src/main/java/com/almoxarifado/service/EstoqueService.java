@@ -14,6 +14,10 @@ public class EstoqueService {
     @Autowired
     private ItemRepository itemRepository;
 
+    public List<Item> listarItensAtivos() {
+        return itemRepository.findAllByAtivoTrue();
+    }
+
     public boolean cadastrarItem(Item item) {
         Optional<Item> existente = itemRepository.findByDescricao(item.getDescricao());
 
@@ -26,14 +30,23 @@ public class EstoqueService {
         itemRepository.save(item);
         return true;
     }
+
+    public void aumentarQuantidadeEmEstoque(Item item, int quantidade) {
+        item.setQuantidade(item.getQuantidade() + quantidade);
+        itemRepository.save(item);
+    }
+
+    public void diminuirQuantidadeEmEstoque(Item item, int quantidade) {
+        item.setQuantidade(item.getQuantidade() - quantidade);
+        itemRepository.save(item);
+    }
     
     public Optional<Item> buscarPorId(Long id) { return itemRepository.findById(id); }
 
-    public List<Item> listarItens() {
-        return itemRepository.findAll();
+    public void inativarItem(Long id) {
+        Item item = this.buscarPorId(id).get();
+        item.setAtivo(false);
+        itemRepository.save(item);
     }
 
-    public void deletarItem(Long id) {
-        itemRepository.deleteById(id);
-    }
 }

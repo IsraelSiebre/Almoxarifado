@@ -41,6 +41,9 @@ public class Item {
     private TipoItem tipo;
 
     @Column
+    private boolean ativo = true;
+
+    @Column
     private String observacoes;
 
 }

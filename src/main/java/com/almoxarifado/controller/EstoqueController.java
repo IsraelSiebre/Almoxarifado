@@ -37,7 +37,7 @@ public class EstoqueController {
         Usuario usuario = principal.getUsuario();
 
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-        model.addAttribute("listaItens", estoqueService.listarItens());
+        model.addAttribute("listaItens", estoqueService.listarItensAtivos());
 
         return "item/lista";
     }
@@ -91,8 +91,6 @@ public class EstoqueController {
         return "item/cadastro";
     }
 
-
-
     @GetMapping("/editar/{id}")
     public String abrirFormularioEdicao(@PathVariable Long id, Authentication auth, Model model, RedirectAttributes redirect) {
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
@@ -110,11 +108,10 @@ public class EstoqueController {
 
     }
 
-
-    @PostMapping("/deletar/{id}")
+    @PostMapping("/inativar/{id}")
     public String deletarItem(@PathVariable Long id, RedirectAttributes redirect) {
-        estoqueService.deletarItem(id);
-        redirect.addFlashAttribute("mensagem", "Item deletado com sucesso!");
+        estoqueService.inativarItem(id);
+        redirect.addFlashAttribute("mensagem", "Item Inativado com sucesso!");
 
         return "redirect:/estoque/";
     }
