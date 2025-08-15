@@ -1,7 +1,6 @@
 package com.almoxarifado.service;
 
 import com.almoxarifado.entity.Item;
-import com.almoxarifado.entity.TipoItem;
 import com.almoxarifado.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

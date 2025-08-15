@@ -1,6 +1,8 @@
 package com.almoxarifado.controller;
 
 import com.almoxarifado.entity.Usuario;
+import com.almoxarifado.enums.Role;
+
 import jakarta.validation.Valid;
 import com.almoxarifado.security.UsuarioPrincipal;
 import com.almoxarifado.service.UsuarioService;
@@ -28,6 +30,7 @@ public class CadastroController {
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
         model.addAttribute("cadastro", true);
+        model.addAttribute("roles", Role.values());
 
         return "autenticacao/cadastro";
     }
