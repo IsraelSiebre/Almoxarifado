@@ -91,5 +91,4 @@ public class CadastroController {
         return "autenticacao/cadastro";
     }
 
-
 }

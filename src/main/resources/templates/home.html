@@ -34,7 +34,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- Linha 1: Usuários -->
-    <a th:href="@{/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+    <a th:if="${!aluno}" th:href="@{/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
       <h2 class="text-lg font-semibold text-blue-700 mb-2">Novo usuário</h2>
       <p class="text-gray-600 text-sm">Adicionar um usuário com perfil e permissões no sistema.</p>
     </a>
