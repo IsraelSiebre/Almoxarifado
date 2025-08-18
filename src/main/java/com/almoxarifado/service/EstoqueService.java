@@ -49,4 +49,8 @@ public class EstoqueService {
         itemRepository.save(item);
     }
 
+    public List<Item> buscarItensAbaixoEstoqueMinimo() {
+        return itemRepository.findItensAbaixoDoEstoqueMinimo();
+    }
+
 }
