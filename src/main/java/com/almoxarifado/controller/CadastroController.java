@@ -24,11 +24,11 @@ public class CadastroController {
     public String mostrarFormularioCadastro(Authentication auth,
                                             Model model) {
 
-        UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
-        Usuario usuario = principal.getUsuario();
+        //UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
+        //Usuario usuario = principal.getUsuario();
 
         model.addAttribute("usuario", new Usuario());
-        model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
+       // model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
         model.addAttribute("cadastro", true);
         model.addAttribute("roles", Role.values());
 

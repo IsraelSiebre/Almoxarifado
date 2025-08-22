@@ -18,9 +18,6 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String codigo;
-
     @Column(nullable = false)
     private String descricao;
 
