@@ -1,120 +1,120 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Home | Ferramentas em Uso Mecânica</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home | Ferramentas em Uso Mecânica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CSRF para Spring Security -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 <body class="bg-gray-100 min-h-screen">
 
 <!-- Navbar -->
 <header class="bg-white shadow">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a th:href="@{/home}" class="text-xl font-bold text-blue-600 hover:underline">
-      Ferramentas em Uso - Mecânica
-    </a>
-    <div class="flex items-center gap-4">
-      <span class="text-gray-700">Olá, <span class="font-semibold" th:text="${nomeUsuario}"></span></span>
-      <form th:action="@{/logout}" method="post">
-        <button type="submit" class="text-sm text-red-600 hover:underline">Sair</button>
-      </form>
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <a th:href="@{/home}" class="text-xl font-bold text-blue-600 hover:underline">
+            Ferramentas em Uso - Mecânica
+        </a>
+        <div class="flex items-center gap-4">
+            <span class="text-gray-700">Olá, <span class="font-semibold" th:text="${nomeUsuario}"></span></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="text-sm text-red-600 hover:underline">Sair</button>
+            </form>
+        </div>
     </div>
-  </div>
 </header>
-
-<!-- Alerta -->
-<div th:if="${mensagem}"
-     class="p-4 mb-6 bg-green-100 border border-green-400 text-green-700 rounded w-full max-w-2xl text-center shadow mx-auto">
-  <span th:text="${mensagem}"></span>
-</div>
 
 <!-- Conteúdo principal -->
 <main class="max-w-7xl mx-auto px-4 py-8">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-    <!-- Linha 1: Usuários -->
-    <a th:if="${!aluno}" th:href="@{/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Novo usuário</h2>
-      <p class="text-gray-600 text-sm">Adicionar um usuário com perfil e permissões no sistema.</p>
-    </a>
+        <!-- Outros links da home aqui ... -->
 
-    <a th:href="@{/editar-perfil}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Meu perfil</h2>
-      <p class="text-gray-600 text-sm">Atualize seus dados pessoais e senha.</p>
-    </a>
+        <!-- Linha 4: Tranca do Armário -->
+        <button id="btnDestrancar" class="block w-full p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <h2 class="text-lg font-semibold text-blue-700 mb-2">Destrancar Armário</h2>
+            <p class="text-gray-600 text-sm">Clique aqui para liberar o acesso ao armário.</p>
+        </button>
 
-    <a th:href="@{/estoque/}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Estoque</h2>
-      <p class="text-gray-600 text-sm">Visualize todos os itens disponíveis no almoxarifado.</p>
-    </a>
+        <button id="btnTrancar" class="block w-full p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <h2 class="text-lg font-semibold text-blue-700 mb-2">Trancar Armário</h2>
+            <p class="text-gray-600 text-sm">Clique aqui para bloquear novamente o armário.</p>
+        </button>
 
-    <!-- Linha 2: Itens e categorias -->
-    <a th:href="@{/estoque/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Adicionar item</h2>
-      <p class="text-gray-600 text-sm">Registre um novo item no estoque com detalhes essenciais.</p>
-    </a>
+        <a th:href="@{/armario/}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <h2 class="text-lg font-semibold text-blue-700 mb-2">Histórico de Uso</h2>
+            <p class="text-gray-600 text-sm">Consulte os registros de abertura e fechamento do armário.</p>
+        </a>
 
-    <a th:href="@{/tipo-item/}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Categorias</h2>
-      <p class="text-gray-600 text-sm">Consulte os tipos e categorias de itens cadastrados.</p>
-    </a>
-
-    <a th:href="@{/tipo-item/cadastro}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Nova categoria</h2>
-      <p class="text-gray-600 text-sm">Crie uma categoria para organizar os itens do estoque.</p>
-    </a>
-
-    <!-- Linha 3: Movimentações -->
-    <a th:href="@{/movimentacoes/nova/ENTRADA}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Entrada</h2>
-      <p class="text-gray-600 text-sm">Registrar entrada de materiais no almoxarifado.</p>
-    </a>
-
-    <a th:href="@{/movimentacoes/nova/SAIDA}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Saída</h2>
-      <p class="text-gray-600 text-sm">Registrar saída de materiais do estoque.</p>
-    </a>
-
-    <a th:href="@{/movimentacoes/}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
-      <h2 class="text-lg font-semibold text-blue-700 mb-2">Movimentações</h2>
-      <p class="text-gray-600 text-sm">Acompanhe o histórico de entradas e saídas.</p>
-    </a>
-
-  </div>
+    </div>
 </main>
+
 <!-- Tabela de itens abaixo do estoque mínimo -->
 <section class="max-w-7xl mx-auto px-4 pb-12">
-  <h2 class="text-xl font-semibold text-red-600 mb-4">⚠ Itens abaixo do estoque mínimo</h2>
+    <h2 class="text-xl font-semibold text-red-600 mb-4">⚠ Itens abaixo do estoque mínimo</h2>
 
-  <div th:if="${#lists.isEmpty(itensAbaixoMinimo)}"
-       class="p-4 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded shadow">
-    Nenhum item está abaixo do estoque mínimo. ✅
-  </div>
+    <div th:if="${#lists.isEmpty(itensAbaixoMinimo)}"
+         class="p-4 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded shadow">
+        Nenhum item está abaixo do estoque mínimo. ✅
+    </div>
 
-  <div th:if="${!#lists.isEmpty(itensAbaixoMinimo)}" class="overflow-x-auto bg-white rounded-lg shadow">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-100">
-      <tr>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Código</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Descrição</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Tipo</th>
-        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Quantidade</th>
-        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Unidade De Medida</th>
-      </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-      <tr th:each="item : ${itensAbaixoMinimo}">
-        <td class="px-6 py-3 text-sm text-gray-900" th:text="${item.codigo}"></td>
-        <td class="px-6 py-3 text-sm text-gray-900" th:text="${item.descricao}"></td>
-        <td class="px-6 py-3 text-sm text-gray-900" th:text="${item.tipo.nome}"></td>
-        <td class="px-6 py-3 text-sm text-center font-semibold text-red-600" th:text="${item.quantidade}"></td>
-        <td class="px-6 py-3 text-sm text-center text-gray-700" th:text="${item.unidadeDeMedida}"></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <div th:if="${!#lists.isEmpty(itensAbaixoMinimo)}" class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Descrição</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Tipo</th>
+                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Quantidade</th>
+                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Unidade De Medida</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            <tr th:each="item : ${itensAbaixoMinimo}">
+                <td class="px-6 py-3 text-sm text-gray-900" th:text="${item.descricao}"></td>
+                <td class="px-6 py-3 text-sm text-gray-900" th:text="${item.tipo.nome}"></td>
+                <td class="px-6 py-3 text-sm text-center font-semibold text-red-600" th:text="${item.quantidade}"></td>
+                <td class="px-6 py-3 text-sm text-center text-gray-700" th:text="${item.unidadeDeMedida}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </section>
+
+<!-- Script AJAX para trancar/destrancar -->
+<script>
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+    document.getElementById("btnDestrancar").addEventListener("click", function() {
+        fetch('/armario/abrir', {
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(msg => alert(msg))
+        .catch(err => alert('Erro ao abrir armário!'));
+    });
+
+    document.getElementById("btnTrancar").addEventListener("click", function() {
+        fetch('/armario/trancar', {
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(msg => alert(msg))
+        .catch(err => alert('Erro ao trancar armário!'));
+    });
+
+</script>
 
 </body>
 </html>

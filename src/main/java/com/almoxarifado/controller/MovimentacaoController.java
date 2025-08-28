@@ -101,11 +101,4 @@ public class MovimentacaoController {
         return "movimentacoes/cadastro";
     }
 
-    @PostMapping("/deletar/{id}")
-    public String deletarMovimentacao(@PathVariable Long id, RedirectAttributes redirect) {
-        movimentacaoService.deletarMovimentacao(id);
-        redirect.addFlashAttribute("mensagem", "Movimentação deletada com sucesso!");
-
-        return "redirect:/movimentacoes/";
-    }
 }
