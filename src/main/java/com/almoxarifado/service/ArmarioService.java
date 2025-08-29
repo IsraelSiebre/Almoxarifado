@@ -4,12 +4,11 @@ import com.almoxarifado.entity.EventoArmario;
 import com.almoxarifado.entity.Usuario;
 import com.almoxarifado.enums.TipoEventoArmario;
 import com.almoxarifado.repository.ArmarioRepository;
-import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.io.IOException;
 
 @Service
 public class ArmarioService {
@@ -17,23 +16,35 @@ public class ArmarioService {
     @Autowired
     ArmarioRepository armarioRepository;
 
-    // GPIO setup (para LED teste, GPIO_00 = pino físico 11)
-    private final GpioController gpio = GpioFactory.getInstance();
-    private final GpioPinDigitalOutput pino = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21, "Tranca", PinState.LOW);
+    // GPIO info
+    private static final int CHIP = 0;      // gpiochip0
+    private static final int LINE = 21;     // GPIO que controla a tranca
 
-    public List<EventoArmario> listarEventosArmario() {
+    // Método para setar GPIO usando gpioset
+    private void setPin(boolean high) throws IOException, InterruptedException {
+        String value = high ? "1" : "0";
+        ProcessBuilder pb = new ProcessBuilder(
+                "gpioset",
+                String.valueOf(CHIP),
+                LINE + "=" + value
+        );
+        Process process = pb.start();
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new RuntimeException("Erro ao executar gpioset, código: " + exitCode);
+        }
+    }
+
+    public java.util.List<EventoArmario> listarEventosArmario() {
         return armarioRepository.findAll();
     }
 
     // Abrir armário (destrancar)
     public void abrir(Usuario usuario) {
         try {
-            pino.high(); // acende LED / ativa relé
-            Thread.sleep(2000); // mantém 2 segundos
-        } catch (InterruptedException e) {
+            setPin(true);  // ativa pino (HIGH)
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            pino.low(); // desliga LED / relé
         }
 
         salvarEvento(usuario, TipoEventoArmario.DESTRANCA);
@@ -41,7 +52,12 @@ public class ArmarioService {
 
     // Trancar armário
     public void trancar(Usuario usuario) {
-        // Se usar relé/LED, aqui pode não precisar ligar nada
+        try {
+            setPin(false); // desativa pino (LOW)
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         salvarEvento(usuario, TipoEventoArmario.TRANCA);
     }
 

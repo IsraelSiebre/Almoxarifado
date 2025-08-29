@@ -1,7 +1,6 @@
 package com.almoxarifado.security;
 
 import com.almoxarifado.entity.Usuario;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,12 +8,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
 public class UsuarioPrincipal implements UserDetails {
     private final Usuario usuario;
 
     public UsuarioPrincipal(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     @Override
