@@ -29,6 +29,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/login") // onde o formulário POST será enviado
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )

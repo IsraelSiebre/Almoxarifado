@@ -12,10 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -32,15 +29,42 @@ public class EstoqueController {
     private TipoItemService tipoItemService;
 
     @GetMapping("/")
-    public String mostarEstoque(Authentication auth, Model model) {
+    public String mostarEstoque(
+            Authentication auth,
+            Model model,
+            @RequestParam(required = false) Integer quantidade,
+            @RequestParam(required = false) String unidade,
+            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) String local,
+            @RequestParam(required = false) Long tipo) {
+
+        // usuário
         UsuarioPrincipal principal = (UsuarioPrincipal) auth.getPrincipal();
         Usuario usuario = principal.getUsuario();
-
         model.addAttribute("nomeUsuario", usuario.primeiroNomeFormatado());
-        model.addAttribute("listaItens", estoqueService.listarItensAtivos());
+
+        // filtros aplicados
+        model.addAttribute("quantidadeSelecionada", quantidade);
+        model.addAttribute("unidadeSelecionada", unidade);
+        model.addAttribute("marcaSelecionada", marca);
+        model.addAttribute("localSelecionado", local);
+        model.addAttribute("tipoSelecionado", tipo);
+
+        // lista de itens filtrados
+        model.addAttribute("listaItens",
+                estoqueService.buscarComFiltro(quantidade, unidade, marca, local, tipo));
+
+        // valores únicos para os selects
+        model.addAttribute("quantidades", estoqueService.listarQuantidadesUnicas());
+        model.addAttribute("unidades", estoqueService.listarUnidadesUnicas());
+        model.addAttribute("marcas", estoqueService.listarMarcasUnicas());
+        model.addAttribute("locais", estoqueService.listarLocaisUnicos());
+        model.addAttribute("tipos", tipoItemService.listarTiposItem());
 
         return "item/lista";
     }
+
+
 
     @GetMapping("/cadastro")
     public String mostrarFormularioItem(Authentication auth, Model model) {

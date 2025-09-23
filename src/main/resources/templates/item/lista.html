@@ -39,6 +39,62 @@
         </a>
     </div>
 
+    <form th:action="@{/estoque/}" method="get" class="mb-6 grid grid-cols-5 gap-4">
+        <select name="quantidade" class="px-3 py-2 border rounded">
+            <option value="">-- Quantidade --</option>
+            <option th:each="q : ${quantidades}"
+                    th:value="${q}"
+                    th:text="${q}"
+                    th:selected="${q} == ${quantidadeSelecionada}">
+            </option>
+        </select>
+
+        <select name="unidade" class="px-3 py-2 border rounded">
+            <option value="">-- Unidade --</option>
+            <option th:each="u : ${unidades}"
+                    th:value="${u}"
+                    th:text="${u}"
+                    th:selected="${u} == ${unidadeSelecionada}">
+            </option>
+        </select>
+
+        <select name="marca" class="px-3 py-2 border rounded">
+            <option value="">-- Marca --</option>
+            <option th:each="m : ${marcas}"
+                    th:value="${m}"
+                    th:text="${m}"
+                    th:selected="${m} == ${marcaSelecionada}">
+            </option>
+        </select>
+
+        <select name="local" class="px-3 py-2 border rounded">
+            <option value="">-- Local --</option>
+            <option th:each="l : ${locais}"
+                    th:value="${l}"
+                    th:text="${l}"
+                    th:selected="${l} == ${localSelecionado}">
+            </option>
+        </select>
+
+        <select name="tipo" class="px-3 py-2 border rounded">
+            <option value="">-- Tipo --</option>
+            <option th:each="t : ${tipos}"
+                    th:value="${t.id}"
+                    th:text="${t.nome}"
+                    th:selected="${t.id} == ${tipoSelecionado}">
+            </option>
+        </select>
+
+
+        <div class="col-span-5 flex justify-end mt-2">
+            <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Filtrar
+            </button>
+        </div>
+    </form>
+
+
     <!-- Tabela -->
     <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
