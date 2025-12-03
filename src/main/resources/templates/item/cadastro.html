@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title th:text="${cadastro} ? 'Cadastrar Item | Ferramentas em Uso Mecânica' : 'Editar Item | Ferramentas em Uso Mecânica'" ></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .watermark {
+            position: fixed;
+            bottom: 10px;        /* distância da parte inferior */
+            right: 15px;         /* distância da parte direita */
+            opacity: 0.25;       /* transparência */
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none; /* não interfere em cliques */
+            color: #212529; /* acompanha modo claro/escuro */
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -103,5 +116,7 @@
     </div>
 
 </main>
+<div class="watermark">By Israel Siebre</div>
+
 </body>
 </html>

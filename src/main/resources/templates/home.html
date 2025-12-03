@@ -9,6 +9,19 @@
     <!-- CSRF para Spring Security -->
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        .watermark {
+            position: fixed;
+            bottom: 10px;        /* distância da parte inferior */
+            right: 15px;         /* distância da parte direita */
+            opacity: 0.25;       /* transparência */
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none; /* não interfere em cliques */
+            color: #212529; /* acompanha modo claro/escuro */
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -173,6 +186,7 @@
     });
 
 </script>
+<div class="watermark">By Israel Siebre</div>
 
 </body>
 </html>
